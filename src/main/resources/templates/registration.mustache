@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: black;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Add padding to containers */
+        .container {
+            padding: 16px;
+            background-color: white;
+        }
+
+        /* Full-width input fields */
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        input[type=text]:focus, input[type=password]:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0 22px 0;
+            display: inline-block;
+            border: none;
+            background: #f1f1f1;
+        }
+
+        select:focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+        /* Overwrite default styles of hr */
+        hr {
+            border: 1px solid #f1f1f1;
+            margin-bottom: 25px;
+        }
+
+        /* Set a style for the submit button */
+        .registerbtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 16px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            opacity: 0.9;
+        }
+
+        .registerbtn:hover {
+            opacity: 1;
+        }
+
+        /* Add a blue text color to links */
+        a {
+            color: dodgerblue;
+        }
+
+        /* Set a grey background color and center the text of the "sign in" section */
+        .signin {
+            background-color: #f1f1f1;
+            text-align: center;
+        }
+
+        .container > .heading {
+            text-align: center;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        var regionLists = new Array(2)
+        regionLists["empty"] = ["Select a Region"];
+        regionLists["USA"] = ["Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississipi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
+
+        regionLists["Canada"] = ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatachewan", "Yukon"];
+
+        function countryChange(selectObj) {
+            var idx = selectObj.selectedIndex;
+            var which = selectObj.options[idx].value;
+            cList = regionLists[which];
+            var cSelect = document.getElementById("region");
+            var len=cSelect.options.length;
+            while (cSelect.options.length > 0) {
+                cSelect.remove(0);
+            }
+            var newOption;
+            // create new options
+            for (var i=0; i<cList.length; i++) {
+                newOption = document.createElement("option");
+                newOption.value = cList[i];  // assumes option string and value are the same
+                newOption.text=cList[i];
+                try {
+                    cSelect.add(newOption);
+                }
+                catch (e) {
+                    cSelect.appendChild(newOption);
+                }
+            }
+        }
+        //]]>
+    </script>
+</head>
+<body>
+
+{{#message}}
+    {{message}}
+{{/message}}
+
+<form action="/registration" method="post">
+    <div class="container">
+        <span><a href="home">Go to home page</a></span>
+        <div class="heading">
+            <h1>Register</h1>
+            <p>Please fill in this form to create an account.</p>
+        </div>
+        <hr>
+
+        <label for="username"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="username" required>
+
+        <label for="password"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="password" required>
+
+        <!--<label for="country"><b>Country</b></label>
+        <input type="text" placeholder="Enter Country" name="country" required> -->
+        <label for="country"><b>Country</b></label>
+        <select id="country" name="country" onchange="countryChange(this);">
+            <option value="empty">Select a Country</option>
+            <option value="USA">USA</option>
+            <option value="Canada">Canada</option>
+        </select>
+        <br/>
+        <label for="region"><b>Region</b></label>
+        <select id="region" name="region">
+            <option value="0">Select a Region</option>
+        </select>
+
+        <hr>
+
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        <button type="submit" class="registerbtn">Register</button>
+    </div>
+
+    <div class="container signin">
+        <p>Already have an account? <a href="#">Sign in</a>.</p>
+    </div>
+</form>
+
+</body>
+</html>

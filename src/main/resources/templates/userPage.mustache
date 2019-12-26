@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+</head>
+<body>
+<h1>USER PAGE</h1>
+<span><a href="/home">Go to home page</a></span>
+<div>
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
+        <input type="submit" value="Sign Out"/>
+    </form>
+</div>
+<h3>Registered users</h3>
+<div>
+    <table border="2">
+        <tr align="center">
+            <th>Id</th>
+            <th>Username</th>
+            <th>Country</th>
+            <th>Region</th>
+        </tr>
+        {{#users}}
+            <tr align="center">
+                <td>{{id}}</td>
+                <td>{{username}}</td>
+                <td>{{Country}}</td>
+                <td>{{Region}}</td>
+            </tr>
+        {{/users}}
+    </table>
+</div>
+</body>
+</html>
