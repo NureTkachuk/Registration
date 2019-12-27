@@ -15,7 +15,7 @@ If you try to click on user or admin, server asks you to LogIn:
 ![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/login.png)
 
 
-![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/register.png)
+![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/registration.png)
 
 
 After authorization you get user or admin page depends on your choose.
