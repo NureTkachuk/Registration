@@ -8,16 +8,14 @@ Spring Boot Application with Gradle building. This application is for registrati
 When projects starts it is possible to get to home page by path: "http://localhost:8080/". 
 Here you see home page where you can choose user or admin variant of page:
 
-HOME PAGE
 ![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/home.png)
 
 If you try to click on user or admin, server asks you to LogIn:
 
-(https://github.com/AlexTkachukPC/Registration/raw/master/images/login.png)
+![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/login.png)
 
 
-REGISTER PAGE
-(https://github.com/AlexTkachukPC/Registration/raw/master/images/register.png)
+![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/register.png)
 
 
 After authorization you get user or admin page depends on your choose.
@@ -35,7 +33,7 @@ If you are a user what server only allows you is just see all of registered user
 
 If you are a admin, server allows you see all users and modify their data(## EXCEPT PASSWORD!) or delete users.
 
-EDIT PAGE
+![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/editPage.png)
 
 
 
