@@ -13,11 +13,11 @@ HOME PAGE
 
 If you try to click on user or admin, server asks you to LogIn:
 
-![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/login.png)
+(https://github.com/AlexTkachukPC/Registration/raw/master/images/login.png)
 
 
 REGISTER PAGE
-![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/register.png)
+(https://github.com/AlexTkachukPC/Registration/raw/master/images/register.png)
 
 
 After authorization you get user or admin page depends on your choose.
