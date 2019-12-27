@@ -33,7 +33,7 @@ If you are a user what server only allows you is just see all of registered user
 
 If you are a admin, server allows you see all users and modify their data(## EXCEPT PASSWORD!) or delete users.
 
-![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/editPage.png)
+![Image alt](https://github.com/AlexTkachukPC/Registration/raw/master/images/EditPage.png)
 
 
 
