@@ -37,18 +37,16 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public boolean addUser(User user) {
+    public User createUser(User user) {
         User userFromDb = (User) loadUserByUsername(user.getUsername());
 
         if(userFromDb != null) {
-            return false;
+            return null;
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
-        userRepository.save(user);
-        return true;
+        return userRepository.save(user);
     }
 
     public User findUserById(int id) {
@@ -59,13 +57,14 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    public void userChangeSave(Integer id, String username, String country,
-                               String region) {
-
-        User user = userRepository.getOne(id);
-        if(!username.equals("")) user.setUsername(username);
-        if(!country.equals("")) user.setCountry(country);
-        if(!region.equals("")) user.setRegion(region);
-        userRepository.save(user);
+    public User updateUser(User user) {
+        User found = userRepository.getOne(user.getId());
+        String username = user.getUsername();
+        String country = user.getCountry();
+        String region = user.getRegion();
+        if(username != null & !username.isEmpty()) found.setUsername(username);
+        if(country != null & !country.isEmpty()) found.setCountry(country);
+        if(region != null & !region.isEmpty()) found.setRegion(region);
+       return userRepository.save(found);
     }
 }
