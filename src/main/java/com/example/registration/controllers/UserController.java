@@ -1,5 +1,6 @@
 package com.example.registration.controllers;
 
+import com.example.registration.dto.UserDTO;
 import com.example.registration.model.User;
 import com.example.registration.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @GetMapping(path = "{id}")
-    public User getUserById(@PathVariable Integer id) {
+    public UserDTO getUserById(@PathVariable Integer id) {
         return userService.findUserById(id);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping
-    public User updateUser(User user) {
+    public UserDTO updateUser(UserDTO user) {
         return userService.updateUser(user);
     }
 

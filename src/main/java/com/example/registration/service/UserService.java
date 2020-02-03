@@ -1,35 +1,26 @@
 package com.example.registration.service;
 
 
-import com.example.registration.model.Role;
+import com.example.registration.dto.UserDTO;
 import com.example.registration.model.User;
 import com.example.registration.repo.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
+
+    private static final ModelMapper mapper = new ModelMapper();
 
     private final UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -38,33 +29,36 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(User user) {
-        User userFromDb = (User) loadUserByUsername(user.getUsername());
+        User userFromDb = getUserByUsername(user.getUsername());
 
         if(userFromDb != null) {
             return null;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
         return userRepository.save(user);
     }
 
-    public User findUserById(int id) {
-        return userRepository.findById(id).get();
+    public UserDTO findUserById(int id) {
+        return mapper.map(userRepository.findById(id), UserDTO.class);
     }
 
     public void deleteUserById(int id) {
         userRepository.deleteById(id);
     }
 
-    public User updateUser(User user) {
-        User found = userRepository.getOne(user.getId());
+    public UserDTO updateUser(UserDTO user) {
+        User found = mapper.map(userRepository.getOne(user.getId()), User.class);
+
         String username = user.getUsername();
         String country = user.getCountry();
         String region = user.getRegion();
+
         if(username != null & !username.isEmpty()) found.setUsername(username);
         if(country != null & !country.isEmpty()) found.setCountry(country);
         if(region != null & !region.isEmpty()) found.setRegion(region);
-       return userRepository.save(found);
+
+        User savedUser = userRepository.save(found);
+        return mapper.map(savedUser, UserDTO.class);
     }
 }
