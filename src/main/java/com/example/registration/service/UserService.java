@@ -7,6 +7,7 @@ import com.example.registration.repo.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,27 +21,32 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public List<UserDTO> findAllUsers() {
+        List<UserDTO> users = new ArrayList<>();
+        for(User user : userRepository.findAll())
+            users.add(mapper.map(user, UserDTO.class));
+        return users;
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
-    }
-
-    public User createUser(User user) {
-        User userFromDb = getUserByUsername(user.getUsername());
+    public UserDTO createUser(UserDTO user) {
+        User userFromDb = userRepository.findByUsername(user.getUsername());
 
         if(userFromDb != null) {
             return null;
         }
-        user.setPassword(user.getPassword());
-        user.setActive(true);
-        return userRepository.save(user);
+        User createdUser = mapper.map(user, User.class);
+        createdUser.setActive(true);
+        createdUser.setPassword(user.getPassword());
+        return mapper.map(userRepository.save(createdUser), UserDTO.class);
     }
 
     public UserDTO findUserById(int id) {
         return mapper.map(userRepository.findById(id), UserDTO.class);
+    }
+
+    public UserDTO getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return mapper.map(user, UserDTO.class);
     }
 
     public void deleteUserById(int id) {

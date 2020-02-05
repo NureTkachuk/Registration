@@ -9,7 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 
 
-@RestController("api/users")
+@RestController
+@RequestMapping("api/users")
 public class UserController {
 
     private final UserService userService;
@@ -19,12 +20,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.findAllUsers();
     }
 
     @PostMapping
-    public User createUser(User user) {
+    public UserDTO createUser(UserDTO user) {
         return userService.createUser(user);
     }
 
