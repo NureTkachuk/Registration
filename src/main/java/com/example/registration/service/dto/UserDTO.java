@@ -1,4 +1,4 @@
-package com.example.registration.dto;
+package com.example.registration.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

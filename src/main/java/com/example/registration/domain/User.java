@@ -1,4 +1,4 @@
-package com.example.registration.model;
+package com.example.registration.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

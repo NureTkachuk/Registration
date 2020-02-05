@@ -1,7 +1,6 @@
-package com.example.registration.controllers;
+package com.example.registration.web;
 
-import com.example.registration.dto.UserDTO;
-import com.example.registration.model.User;
+import com.example.registration.service.dto.UserDTO;
 import com.example.registration.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;

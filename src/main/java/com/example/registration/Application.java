@@ -1,8 +1,7 @@
 package com.example.registration;
 
-import com.example.registration.model.User;
-import com.example.registration.repo.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.registration.domain.User;
+import com.example.registration.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
