@@ -63,9 +63,9 @@ public class UserService {
         String country = user.getCountry();
         String region = user.getRegion();
 
-        if(username != null & !username.isEmpty()) found.setUsername(username);
-        if(country != null & !country.isEmpty()) found.setCountry(country);
-        if(region != null & !region.isEmpty()) found.setRegion(region);
+        if(username != null && !username.isEmpty()) found.setUsername(username);
+        if(country != null && !country.isEmpty()) found.setCountry(country);
+        if(region != null && !region.isEmpty()) found.setRegion(region);
 
         User savedUser = userRepository.save(found);
         return mapper.map(savedUser, UserDTO.class);
