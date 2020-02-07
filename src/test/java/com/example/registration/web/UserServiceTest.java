@@ -8,9 +8,18 @@ import com.example.registration.service.dto.UserDTO;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
+@ActiveProfiles("test")
 public class UserServiceTest {
 
     @Autowired
@@ -25,10 +34,17 @@ public class UserServiceTest {
 
     @Test
     public void getAllUsers() {
-       UserDTO admin = new UserDTO(1, "admin", "admin", true, "USA", "California");
-       UserDTO user = new UserDTO(2, "user", "user", true, "USA", "Florida");
-       userRepository.save(mapper.map(admin, User.class));
-       userRepository.save(mapper.map(user, User.class));
-       assertEquals(2, userService.findAllUsers().size());
+       List<User> expectedUsers  =
+               Arrays.asList(new UserDTO(1, "admin", "admin", true, "USA", "California"),
+                             new UserDTO(2, "user", "user", true, "USA", "Florida"))
+               .stream()
+               .map(UserDTO -> mapper.map(UserDTO, User.class))
+               .collect(toList());
+
+       userRepository.saveAll(expectedUsers);
+       List<User> actualUsers =  userRepository.findAll();
+
+       assertEquals(expectedUsers, actualUsers);
+
     }
 }
