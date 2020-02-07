@@ -18,18 +18,18 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<UserDTO> getUsers() {
         return userService.findAllUsers();
     }
 
-    @PostMapping
-    public UserDTO createUser(UserDTO user) {
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDTO createUser(@RequestBody UserDTO user) {
         return userService.createUser(user);
     }
 
-    @GetMapping(path = "{id}")
-    @ResponseStatus(HttpStatus.FOUND)
+    @GetMapping(path = "{id}", produces = "application/json")
     public UserDTO getUserById(@PathVariable Integer id) {
         return userService.findUserById(id);
     }
@@ -39,8 +39,8 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @PutMapping
-    public UserDTO updateUser(UserDTO user) {
+    @PutMapping(consumes = "application/json", produces = "application/json")
+    public UserDTO updateUser(@RequestBody UserDTO user) {
         return userService.updateUser(user);
     }
 

@@ -4,20 +4,14 @@ import com.example.registration.service.dto.UserDTO;
 import com.example.registration.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -36,42 +30,7 @@ class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-    
-    @Autowired UserController userController;
 
-
-//    @Test
-//    public void getUsers() {
-//        when(userService.findAllUsers()).thenReturn(Stream
-//        .of(new UserDTO(1, "admin", "admin", true, "USA", "California"),
-//            new UserDTO(2, "user", "user", true, "USA", "Florida"))
-//                .collect(Collectors.toList()));
-//
-//        assertEquals(2, userService.findAllUsers().size());
-//    }
-
-//    @Test
-//    public void createUser() {
-//        UserDTO user = new UserDTO();
-//        when(userService.createUser(user)).thenReturn(user);
-//        assertEquals(user, userService.createUser(user));
-//    }
-
-//    @Test
-//    public void deleteUser() {
-//        UserDTO user = new UserDTO();
-//        userService.deleteUserById(user.getId());
-//        verify(userService, times(1)).deleteUserById(user.getId());
-//    }
-
-
-//    @Test
-//    public void updateUser() {
-//        UserDTO expectedUser = new UserDTO(2, "user", "user", true, "USA", "California");
-//        when(userService.updateUser(expectedUser)).thenReturn(expectedUser);
-//        UserDTO actualUser = userService.updateUser(expectedUser);
-//        assertEquals(expectedUser, actualUser);
-//    }
 
     @Test
     public void findUserById() throws Exception {
@@ -117,13 +76,15 @@ class UserControllerTest {
 
     @Test
     public void createUser() throws Exception {
-        UserDTO expectedUser = new UserDTO();
+        UserDTO expectedUser = new UserDTO(1, "user", "user", true, "USA", "Florida");
 
         given(userService.createUser(expectedUser)).willReturn(expectedUser);
 
         String json = mockMvc.perform(post("/api/users")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .content(objectMapper.writeValueAsString(expectedUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -149,13 +110,14 @@ class UserControllerTest {
 
     @Test
     public void updateUser() throws Exception {
-        UserDTO user = new UserDTO(2, "", "", true, "", "Kansas");
         UserDTO expectedUser = new UserDTO(2, "user", "user", true, "USA", "Kansas");
 
-        given(userService.updateUser(user)).willReturn(expectedUser);
+        given(userService.updateUser(expectedUser)).willReturn(expectedUser);
 
         String json = mockMvc.perform(put("/api/users")
-                .accept(MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(expectedUser))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse()
@@ -170,12 +132,9 @@ class UserControllerTest {
     @Test
     public void findUserByIdNotFound() throws Exception {
         //given(userService.findUserById(11)).willThrow(new EntityNotFoundException("User is not found!"));
+        when(userService.findUserById(1)).thenThrow(new EntityNotFoundException("User is not found!"));
 
-
-        when(userService.findUserById(11)).thenThrow(new EntityNotFoundException("User is not found!"));
-
-
-        mockMvc.perform(get("/api/users/11")
+        mockMvc.perform(get("/api/users/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -186,7 +145,9 @@ class UserControllerTest {
         when(userService.createUser(user)).thenThrow(new BusinessException("User already exists!"));
 
         mockMvc.perform(post("/api/users")
-                .accept(MediaType.APPLICATION_JSON))
+                .content(objectMapper.writeValueAsString(user))
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
                 .andExpect(status().isBadRequest());
     }
 

@@ -1,6 +1,5 @@
 package com.example.registration.service;
 
-
 import com.example.registration.service.dto.UserDTO;
 import com.example.registration.domain.User;
 import com.example.registration.repository.UserRepository;
@@ -11,18 +10,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final ModelMapper mapper = MapperConfiguration.modelMapper();
-
     private final UserRepository userRepository;
+
+    private final ModelMapper mapper;
 
     @Transactional(readOnly = true)
     public List<UserDTO> findAllUsers() {
