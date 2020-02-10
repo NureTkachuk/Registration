@@ -1,25 +1,15 @@
 package com.example.registration.service;
 
-import com.example.registration.domain.User;
-import com.example.registration.repository.UserRepository;
-import com.example.registration.service.UserService;
 import com.example.registration.service.dto.UserDTO;
 import com.example.registration.web.BusinessException;
 import com.example.registration.web.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -28,13 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private  UserService userService;
 
-    @Autowired
-    private ModelMapper mapper;
 
 
     @Test
@@ -96,9 +81,9 @@ public class UserServiceTest {
 
     @Test
     public void businessExceptionThrown() {
-        UserDTO user = new UserDTO(1, "Bob", "12345", true, "Canada", "RegionName");
-        userService.createUser(user);
+        userService.createUser(new UserDTO(null, "Bob", "12345", true, "Canada", "RegionName"));
 
-        assertThrows(BusinessException.class, () -> userService.createUser(user));
+        assertThrows(BusinessException.class,
+                () -> userService.createUser(new UserDTO(null, "Bob", "12345", true, "Canada", "RegionName")));
     }
 }
