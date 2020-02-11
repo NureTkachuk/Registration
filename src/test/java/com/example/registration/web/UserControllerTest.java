@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
@@ -33,15 +35,16 @@ class UserControllerTest {
 
 
     @Test
+    @WithMockUser
     public void findUserById() throws Exception {
 
         UserDTO expectedUser = new UserDTO();
-        expectedUser.setId(2);
+        expectedUser.setId(1);
         expectedUser.setUsername("user");
 
-        given(userService.findUserById(2)).willReturn(expectedUser);
+        given(userService.findUserById(1)).willReturn(expectedUser);
 
-        String json = mockMvc.perform(get("/api/users/2")
+        String json = mockMvc.perform(get("/api/users/1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -56,6 +59,7 @@ class UserControllerTest {
 
 
     @Test
+    @WithMockUser
     public void getAllUsers() throws Exception {
         List<UserDTO> expectedUsers = Arrays.asList(new UserDTO(1, "admin", "admin", true, "USA", "California"),
                                                     new UserDTO(2, "user", "user", true, "USA", "Florida"));
@@ -75,6 +79,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createUser() throws Exception {
         UserDTO expectedUser = new UserDTO(1, "user", "user", true, "USA", "Florida");
 
@@ -95,6 +100,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void deleteUser() throws Exception {
         UserDTO user = new UserDTO(2, "user", "user", true, "USA", "Florida");
 
@@ -109,6 +115,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void updateUser() throws Exception {
         UserDTO expectedUser = new UserDTO(2, "user", "user", true, "USA", "Kansas");
 
@@ -130,6 +137,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void findUserByIdNotFound() throws Exception {
         //given(userService.findUserById(11)).willThrow(new EntityNotFoundException("User is not found!"));
         when(userService.findUserById(1)).thenThrow(new EntityNotFoundException("User is not found!"));
@@ -140,6 +148,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     public void createUserBusinessException() throws Exception {
         UserDTO user = new UserDTO(1, "user", "", true, "", "");
         when(userService.createUser(user)).thenThrow(new BusinessException("User already exists!"));

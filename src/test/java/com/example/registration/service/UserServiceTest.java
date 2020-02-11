@@ -20,8 +20,6 @@ public class UserServiceTest {
     @Autowired
     private  UserService userService;
 
-
-
     @Test
     public void createUser() {
         UserDTO expectedUser = userService.createUser(new UserDTO(null, "Bob", "12345", true, "Canada", "RegionName"));
