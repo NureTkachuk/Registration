@@ -16,7 +16,6 @@ import javax.sql.DataSource;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private DataSource dataSource;
     private UserRepository userRepository;
 
     @Bean
@@ -29,20 +28,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     };
 
-    public SecurityConfiguration(DataSource dataSource, UserRepository userRepository) {
-        this.dataSource = dataSource;
+    public SecurityConfiguration(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication().dataSource(dataSource)
-//                .usersByUsernameQuery(
-//                        "select username,password, enabled from users where username=?")
-//                .authoritiesByUsernameQuery(
-//                        "select username, role from user_roles where username=?")
-//                .passwordEncoder(new BCryptPasswordEncoder());
-//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -57,11 +46,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/users/**").hasRole("USER") // get by Id
-                .antMatchers(HttpMethod.GET, "/api/users/").hasRole("ADMIN") // get all
-                .antMatchers(HttpMethod.POST, "/api/users/").hasRole("USER") // create
-                .antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("USER") // update
-                .antMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN") // delete
+                .antMatchers(HttpMethod.GET, "/api/users/**").hasAuthority("ADMIN") // get by Id
+                .antMatchers(HttpMethod.GET, "/api/users/").hasAnyAuthority("USER", "ADMIN") // get all
+                .antMatchers(HttpMethod.POST, "/api/users/").hasAuthority("USER") // create
+                .antMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority("ADMIN") // update
+                .antMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority("ADMIN") // delete
                 .and()
                 .csrf().disable()
                 .formLogin().disable();

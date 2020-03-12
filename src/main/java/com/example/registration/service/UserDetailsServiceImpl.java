@@ -1,5 +1,6 @@
 package com.example.registration.service;
 
+import com.example.registration.domain.User;
 import com.example.registration.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return (UserDetails) userRepository.findByUsername(username);
+        User userFromBD = userRepository.findByUsername(username);
+             return new org.springframework.security.core.userdetails.User(
+                     userFromBD.getUsername(),
+                     userFromBD.getPassword(),
+                     userFromBD.getRoles());
     }
 }
