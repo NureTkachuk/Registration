@@ -34,6 +34,8 @@ dependencies {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
     testImplementation('com.h2database:h2')
+
+    testCompile group: 'org.hamcrest', name: 'hamcrest-junit', version: '2.0.0.0'
 }
 
 test {
