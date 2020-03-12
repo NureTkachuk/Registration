@@ -1,10 +1,14 @@
 package com.example.registration.config;
 
+import com.example.registration.repository.UserRepository;
+import com.example.registration.service.UserDetailsServiceImpl;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
@@ -13,19 +17,36 @@ import javax.sql.DataSource;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private DataSource dataSource;
+    private UserRepository userRepository;
 
-    public SecurityConfiguration(DataSource dataSource) {
-        this.dataSource = dataSource;
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl(userRepository);
     }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    };
+
+    public SecurityConfiguration(DataSource dataSource, UserRepository userRepository) {
+        this.dataSource = dataSource;
+        this.userRepository = userRepository;
+    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery(
+//                        "select username,password, enabled from users where username=?")
+//                .authoritiesByUsernameQuery(
+//                        "select username, role from user_roles where username=?")
+//                .passwordEncoder(new BCryptPasswordEncoder());
+//    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery(
-                        "select username,password, enabled from users where username=?")
-                .authoritiesByUsernameQuery(
-                        "select username, role from user_roles where username=?")
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
 
