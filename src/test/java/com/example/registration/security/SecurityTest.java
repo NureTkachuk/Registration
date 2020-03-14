@@ -70,4 +70,19 @@ public class SecurityTest {
                 template.exchange("http://localhost:8080/api/users/", HttpMethod.PUT, request, User.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
+
+    @Test
+    public void getAllUsersByUser() {
+        TestRestTemplate template = new TestRestTemplate("user", "user");
+        ResponseEntity<String> response = template.getForEntity("http://localhost:8080/api/users/", String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
+    }
+
+    @Test
+    public void deleteUserByUser() {
+        TestRestTemplate template = new TestRestTemplate("user", "user");
+        String url = "http://localhost:8080/api/users/2222";
+        ResponseEntity<String> response = template.exchange(url, HttpMethod.DELETE, null, String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
+    }
 }
