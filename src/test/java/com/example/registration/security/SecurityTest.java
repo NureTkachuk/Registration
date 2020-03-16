@@ -51,7 +51,7 @@ public class SecurityTest {
         TestRestTemplate template = new TestRestTemplate("admin", "admin");
         String url = "http://localhost:8080/api/users/2222";
         ResponseEntity<String> response = template.exchange(url, HttpMethod.DELETE, null, String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class SecurityTest {
         HttpEntity<User> request = new HttpEntity<>(user, new HttpHeaders());
         ResponseEntity<String> response =
                 template.exchange("http://localhost:8080/api/users/", HttpMethod.PUT, request, String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
     }
 
     @Test
