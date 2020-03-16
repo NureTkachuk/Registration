@@ -1,24 +1,24 @@
 package com.example.registration.security;
 
-import com.example.registration.domain.Role;
 import com.example.registration.domain.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.registration.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
-import javax.transaction.Transactional;
-import java.util.HashSet;
-import java.util.Set;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
 
-//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
-@Transactional
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@ActiveProfiles("test")
 public class SecurityTest {
 
     @MockBean
@@ -41,37 +41,29 @@ public class SecurityTest {
     @Test
     public void createUser() {
         TestRestTemplate template = new TestRestTemplate("user", "user");
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.USER);
-        User user = new User(3, "bob", "123", true, "Canada", "Canada",roles);
-        HttpEntity<User> request = new HttpEntity<>(user, new HttpHeaders());
-        ResponseEntity<String> response = template.postForEntity("http://localhost:8080/api/users", request, String.class);
+        User user = new User(null, "bob", "123", true, "Canada", "Canada", null);
+        ResponseEntity<String> response = template.postForEntity("http://localhost:8080/api/users", user, String.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
-
     }
 
     @Test
     public void deleteUser() {
         TestRestTemplate template = new TestRestTemplate("admin", "admin");
-        String url = "http://localhost:8080/api/users/{id}";
-        Integer id = 2;
-        HttpEntity<Integer> request = new HttpEntity<>(id, new HttpHeaders());
-        ResponseEntity<String> response = template.exchange(url, HttpMethod.DELETE, request, String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
+        String url = "http://localhost:8080/api/users/2222";
+        ResponseEntity<String> response = template.exchange(url, HttpMethod.DELETE, null, String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
     @Test
     public void updateUser() {
         TestRestTemplate template = new TestRestTemplate("admin", "admin");
 
-        Set<Role> roles = new HashSet<>();
-        roles.add(Role.USER);
-        User user = new User(2, "bob", "123", true, "Canada", "Canada",roles);
+        User user = new User(2222, "bob", "123", true, "Canada", "Canada", null);
 
         HttpEntity<User> request = new HttpEntity<>(user, new HttpHeaders());
-        ResponseEntity<User> response =
-                template.exchange("http://localhost:8080/api/users/", HttpMethod.PUT, request, User.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        ResponseEntity<String> response =
+                template.exchange("http://localhost:8080/api/users/", HttpMethod.PUT, request, String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
     @Test
