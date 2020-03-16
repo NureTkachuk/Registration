@@ -1,17 +1,17 @@
 package com.example.registration.service;
 
-import com.example.registration.domain.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collection;
 
 @Service
-public class TokenServiceImpl implements TokenService {
+public class JwtServiceImpl implements JwtService {
     private static final String SECRET_KEY = "RegistrationSecretKey";
     @Override
-    public String generateToken(String username, List<Role> roles) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> roles) {
         return Jwts
                 .builder()
                 .setSubject("Registration")
