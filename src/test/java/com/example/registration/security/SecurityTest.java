@@ -21,6 +21,9 @@ import static org.junit.Assert.assertThat;
 @Transactional
 public class SecurityTest {
 
+    @MockBean
+    private UserService userService;
+
     @Test
     public void getAllUsers() {
         TestRestTemplate template = new TestRestTemplate("admin", "admin");
