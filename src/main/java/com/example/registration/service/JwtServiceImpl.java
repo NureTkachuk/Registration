@@ -2,25 +2,26 @@ package com.example.registration.service;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
-    private static final String SECRET_KEY = "RegistrationSecretKey";
+
+    private final JwtProperties jwtProperties;
+
     @Override
-    public String generateToken(String username, Collection<? extends GrantedAuthority> roles) {
-        return Jwts
-                .builder()
-                .setSubject("Registration")
-                .claim("name", username)
+    public String generateToken(String username, Collection<String> roles) {
+        return Jwts.builder()
+                .setSubject(username)
                 .claim("roles", roles)
-                .signWith(
-                        SignatureAlgorithm.HS256,
-                        SECRET_KEY.getBytes()
-                )
+                .setExpiration(new Date(Instant.now().plusSeconds(jwtProperties.getTtl()).toEpochMilli()))
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret().getBytes())
                 .compact();
     }
 }
