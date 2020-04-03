@@ -1,9 +1,9 @@
 package com.example.registration.config;
 
 import com.example.registration.repository.UserRepository;
-import com.example.registration.service.JwtAuthorizationFilter;
-import com.example.registration.service.JwtProperties;
-import com.example.registration.service.UserDetailsServiceImpl;
+import com.example.registration.web.security.JwtAuthorizationFilter;
+import com.example.registration.service.security.JwtProperties;
+import com.example.registration.service.security.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

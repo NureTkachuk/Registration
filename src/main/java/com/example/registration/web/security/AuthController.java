@@ -1,8 +1,8 @@
-package com.example.registration.web;
+package com.example.registration.web.security;
 
-import com.example.registration.service.AuthRequest;
-import com.example.registration.service.AuthResponse;
-import com.example.registration.service.AuthService;
+import com.example.registration.service.security.AuthRequest;
+import com.example.registration.service.security.AuthResponse;
+import com.example.registration.service.security.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

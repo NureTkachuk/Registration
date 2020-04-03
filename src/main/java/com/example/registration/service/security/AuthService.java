@@ -1,4 +1,4 @@
-package com.example.registration.service;
+package com.example.registration.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

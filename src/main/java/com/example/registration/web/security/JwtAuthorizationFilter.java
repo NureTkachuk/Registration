@@ -1,5 +1,6 @@
-package com.example.registration.service;
+package com.example.registration.web.security;
 
+import com.example.registration.service.security.JwtProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

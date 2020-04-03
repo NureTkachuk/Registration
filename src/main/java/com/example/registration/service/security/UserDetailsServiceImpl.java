@@ -1,4 +1,4 @@
-package com.example.registration.service;
+package com.example.registration.service.security;
 
 import com.example.registration.domain.User;
 import com.example.registration.repository.UserRepository;
