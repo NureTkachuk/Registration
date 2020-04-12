@@ -1,9 +1,11 @@
 package com.example.registration.service.security;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class AuthResponse {
     private String accessToken;

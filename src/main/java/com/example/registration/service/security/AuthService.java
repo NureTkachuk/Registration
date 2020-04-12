@@ -32,9 +32,7 @@ public class AuthService {
 
             String token = jwtService.generateToken(username, roles);
 
-            return AuthResponse.builder()
-                    .accessToken(token)
-                    .build();
+            return new AuthResponse(token);
         }
 
         throw new InvalidCredentialsException("Invalid Credentials!");
