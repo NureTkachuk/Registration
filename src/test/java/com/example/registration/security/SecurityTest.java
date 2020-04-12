@@ -9,13 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +28,7 @@ public class SecurityTest {
     @Autowired
     private UserRepository userRepository;
 
+
     private final TestRestTemplate restTemplate = new TestRestTemplate();
 
     @BeforeEach
@@ -48,8 +43,8 @@ public class SecurityTest {
         String adminJwt = loginAsAdmin();
 
         RequestEntity<Void> request = RequestEntity.get(URI.create("http://localhost:8080/api/users"))
-            .header("Authorization", "Bearer " + adminJwt)
-            .build();
+                .header("Authorization", "Bearer " + adminJwt)
+                .build();
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
@@ -61,8 +56,8 @@ public class SecurityTest {
         String userJwt = loginAsUser();
 
         RequestEntity<Void> request = RequestEntity.get(URI.create("http://localhost:8080/api/users"))
-            .header("Authorization", "Bearer " + userJwt)
-            .build();
+                .header("Authorization", "Bearer " + userJwt)
+                .build();
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.FORBIDDEN));
@@ -74,8 +69,8 @@ public class SecurityTest {
         String userJwt = loginAsUser();
 
         RequestEntity<Void> request = RequestEntity.get(URI.create("http://localhost:8080/api/users/1"))
-            .header("Authorization", "Bearer " + userJwt)
-            .build();
+                .header("Authorization", "Bearer " + userJwt)
+                .build();
         ResponseEntity<String> response = restTemplate.exchange(request, String.class);
 
         assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
@@ -84,26 +79,38 @@ public class SecurityTest {
     @Test
     public void createUser() {
         User user = new User(null, "bob", "123", true, "Canada", "Canada", null);
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8080/api/users", user, String.class);
+        String userJwt = loginAsUser();
+
+        RequestEntity<User> request = RequestEntity.post(URI.create("http://localhost:8080/api/users"))
+                .header("Authorization", "Bearer " + userJwt)
+                .body(user);
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
         assertThat(response.getStatusCode(), equalTo(HttpStatus.CREATED));
     }
 
     @Test
-    public void deleteUser() {
-        String url = "http://localhost:8080/api/users/2222";
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+    public void updateUser() {
+        User user = new User(2222, "bob", "123", true, "Canada", "Canada", null);
+        String adminJwt = loginAsAdmin();
+
+        RequestEntity<User> request = RequestEntity.put(URI.create("http://localhost:8080/api/users"))
+                .header("Authorization", "Bearer " + adminJwt)
+                .body(user);
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
     @Test
-    public void updateUser() {
+    public void deleteUser() {
+        String adminJwt = loginAsAdmin();
 
-        User user = new User(2222, "bob", "123", true, "Canada", "Canada", null);
-
-        HttpEntity<User> request = new HttpEntity<>(user, new HttpHeaders());
-        ResponseEntity<String> response =
-                restTemplate.exchange("http://localhost:8080/api/users/", HttpMethod.PUT, request, String.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.OK));
+        RequestEntity<Void> request = RequestEntity.delete(URI.create("http://localhost:8080/api/users/2222"))
+                .header("Authorization", "Bearer " + adminJwt)
+                .build();
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
     @Test
@@ -150,8 +157,8 @@ public class SecurityTest {
     private String login(String username, String password) {
 
         RequestEntity<String> authRequest = RequestEntity.post(URI.create("http://localhost:8080/auth"))
-            .contentType(MediaType.APPLICATION_JSON)
-            .body("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
+                .contentType(MediaType.APPLICATION_JSON)
+                .body("{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}");
 
         ResponseEntity<AuthResponse> authResponse = restTemplate.exchange(authRequest, AuthResponse.class);
         return authResponse.getBody().getAccessToken();
