@@ -1,3 +1,3 @@
-enum Role {
+export enum Role {
   USER, ADMIN
 }

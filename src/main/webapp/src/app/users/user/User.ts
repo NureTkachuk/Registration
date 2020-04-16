@@ -1,3 +1,5 @@
+import { Role } from '../role/Role';
+
 export class User {
   id: number;
   username: string;
@@ -5,5 +7,5 @@ export class User {
   active: boolean;
   country: string;
   region: string;
-  roles: Set<Role>;
+  roles: Set<Role>
 }
