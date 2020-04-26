@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { User } from '../user/user';
 import { UserService } from '../user/user.service';
-import { UserListComponent } from '../user-list/user-list.component';
-
+import {Observable, throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-user-details',
@@ -12,25 +12,21 @@ import { UserListComponent } from '../user-list/user-list.component';
 })
 export class UserDetailsComponent implements OnInit {
 
-  id: number;
-  user: User;
+  user$: Observable<User>;
 
   constructor(private route: ActivatedRoute, private router: Router,
               private userService: UserService) { }
 
   ngOnInit(): void {
-    this.user = new User();
-
-    this.id = this.route.snapshot.params['id'];
-
-    this.userService.getUser(this.id)
-      .subscribe(data => {
-        console.log(data)
-        this.user = data;
-      }, error => console.log(error));
+    const id = this.route.snapshot.params['id'];
+    this.user$ = this.userService.getUser(id);
   }
 
-  list(){
+  list(): void{
     this.router.navigate(['users']);
+  }
+
+  onSubmit() {
+
   }
 }

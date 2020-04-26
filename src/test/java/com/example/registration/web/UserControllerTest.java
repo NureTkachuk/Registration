@@ -1,5 +1,7 @@
 package com.example.registration.web;
 
+import com.example.registration.service.BusinessException;
+import com.example.registration.service.EntityNotFoundException;
 import com.example.registration.service.dto.UserDTO;
 import com.example.registration.service.UserService;
 import com.fasterxml.jackson.core.type.TypeReference;

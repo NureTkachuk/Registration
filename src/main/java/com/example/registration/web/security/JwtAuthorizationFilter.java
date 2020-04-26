@@ -2,6 +2,8 @@ package com.example.registration.web.security;
 
 import com.example.registration.service.security.JwtService;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
@@ -37,15 +40,23 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         String token = header.replace("Bearer ", "");
 
-        Claims claims = jwtService.parseToken(token);
-
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
-
-        SecurityContextHolder.getContext().setAuthentication(auth);
+        Claims claims = parseJwt(token);
+        if (claims != null) {
+            List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
 
         chain.doFilter(request, response);
+    }
+
+    private Claims parseJwt(String token) {
+        try {
+            return jwtService.parseToken(token);
+        } catch (JwtException jwtException) {
+            logger.warn("JWT is invalid", jwtException);
+            return null;
+        }
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {

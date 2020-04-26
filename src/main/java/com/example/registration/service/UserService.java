@@ -3,8 +3,6 @@ package com.example.registration.service;
 import com.example.registration.service.dto.UserDTO;
 import com.example.registration.domain.User;
 import com.example.registration.repository.UserRepository;
-import com.example.registration.web.BusinessException;
-import com.example.registration.web.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

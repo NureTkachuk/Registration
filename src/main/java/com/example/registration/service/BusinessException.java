@@ -1,4 +1,4 @@
-package com.example.registration.web;
+package com.example.registration.service;
 
 public class BusinessException extends RuntimeException {
     public BusinessException(String message) {

@@ -1,27 +1,25 @@
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <h2>Employee List</h2>
+    <h3>Users</h3>
   </div>
   <div class="panel-body">
     <table class="table table-striped">
       <thead>
         <tr>
           <th>Username</th>
-          <th>Password</th>
           <th>Active</th>
           <th>Country</th>
           <th>Region</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users | async">
+        <tr *ngFor="let user of users$ | async">
           <td>{{user.username}}</td>
-          <td>{{user.password}}</td>
           <td>{{user.active}}</td>
           <td>{{user.country}}</td>
           <td>{{user.region}}</td>
           <td><button (click)="deleteUser(user.id)" class="btn btn-danger">Delete</button>
-              <button (click)="userDetails(user.id)" class="btn btn-info" style="margin-left: 10px">Details</button>
+              <button (click)="userDetails(user.id)" class="btn btn-info ml-1">Details</button>
           </td>
         </tr>
       </tbody>

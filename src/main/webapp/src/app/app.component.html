@@ -1,27 +1,28 @@
-<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark" *ngIf="isAuthenticated()">
+  <a class="navbar-brand" routerLink="">{{title}}</a>
   <!-- Links -->
   <ul class="navbar-nav">
     <li class="nav-item">
-      <a routerLink="users" class="nav-link" routerLinkActive="active">User List</a>
+      <a routerLink="users" class="nav-link" routerLinkActive="active">All Users</a>
     </li>
     <li class="nav-item">
-      <a routerLink="add" class="nav-link" routerLinkActive="active">Add User</a>
+      <a routerLink="users/add" class="nav-link" routerLinkActive="active">Add User</a>
     </li>
   </ul>
 </nav>
 <div class="container">
-  <br>
-  <h2 style="text-align: center;">{{title}}</h2>
-  <hr>
-  <div class="card">
-    <div class="card-body">
-      <router-outlet></router-outlet>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-8 offset-sm-2">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
 </div>
-
-<footer class="footer">
-  <div class="container">
-    <span>All Rights Reserved 2020</span>
+<footer class="py-4 bg-secondary text-white-50">
+  <div class="container text-center">
+    <small>All Rights Reserved 2020</small>
   </div>
 </footer>
+
+

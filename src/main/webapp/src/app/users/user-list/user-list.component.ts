@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserDetailsComponent } from '../user-details/user-details.component';
 import { Observable } from "rxjs";
 import { UserService } from "../user/user.service";
-import { User } from "../user/user";
+import { User } from '../user/user';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +10,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-    users: Observable<User[]>
+
+  users$: Observable<User[]>
 
   constructor(private userService: UserService,
               private router: Router) {}
@@ -21,20 +21,15 @@ export class UserListComponent implements OnInit {
   }
 
   reloadData() {
-    this.users = this.userService.getUsersList();
+    this.users$ = this.userService.getUsersList();
   }
 
   deleteUser(id: number) {
     this.userService.deleteUser(id)
-      .subscribe(
-        data => {
-          console.log(data);
-          this.reloadData();
-        },
-        error => console.log(error));
+      .subscribe(_ => this.reloadData());
   }
 
-  userDetails(id: number){
-    this.router.navigate(['details', id]).then();
+  userDetails(id: number) {
+    this.router.navigate(['users', id]).then();
   }
 }

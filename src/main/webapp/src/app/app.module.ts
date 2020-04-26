@@ -7,7 +7,10 @@ import { CreateUserComponent } from './users/create-user/create-user.component';
 import { UserDetailsComponent } from './users/user-details/user-details.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { UpdateUserComponent } from './users/update-user/update-user.component';
-import { HttpClientModule } from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthInterceptor} from "./core/auth/auth.interceptor";
+import { LoginComponent } from './login/login.component';
+import {ErrorInterceptor} from "./core/error.interceptor";
 
 @NgModule({
   declarations: [
@@ -15,7 +18,8 @@ import { HttpClientModule } from '@angular/common/http';
     CreateUserComponent,
     UserDetailsComponent,
     UserListComponent,
-    UpdateUserComponent
+    UpdateUserComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +27,18 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

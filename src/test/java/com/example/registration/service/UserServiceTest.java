@@ -1,8 +1,6 @@
 package com.example.registration.service;
 
 import com.example.registration.service.dto.UserDTO;
-import com.example.registration.web.BusinessException;
-import com.example.registration.web.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

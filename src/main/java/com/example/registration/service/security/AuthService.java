@@ -2,6 +2,7 @@ package com.example.registration.service.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,6 +36,6 @@ public class AuthService {
             return new AuthResponse(token);
         }
 
-        throw new InvalidCredentialsException("Invalid Credentials!");
+        throw new BadCredentialsException("Bad credentials");
     }
 }

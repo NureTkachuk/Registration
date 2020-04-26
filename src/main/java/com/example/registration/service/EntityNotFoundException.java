@@ -1,4 +1,4 @@
-package com.example.registration.web;
+package com.example.registration.service;
 
 public class EntityNotFoundException extends RuntimeException {
     public EntityNotFoundException(String message) {

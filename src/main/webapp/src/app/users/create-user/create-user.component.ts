@@ -1,37 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { UserService } from '../user/user.service';
 import { User } from '../user/user';
 import { Router } from '@angular/router';
+import {catchError} from "rxjs/operators";
+import {throwError} from "rxjs";
 
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
   styleUrls: ['./create-user.component.css']
 })
-export class CreateUserComponent implements OnInit {
+export class CreateUserComponent {
+
   user: User = new User();
   submitted = false;
+  error: string;
 
-  constructor(private userService: UserService,
-              private router: Router) { }
-
-  ngOnInit(): void {
-  }
-
-  newUser(): void {
-    this.submitted = false;
-    this.user = new User();
-  }
+  constructor(private userService: UserService, private router: Router) { }
 
   save() {
     this.userService.createUser(this.user)
-      .subscribe(data => console.log(data), error => console.log(error));
-    this.user = new User();
-    this.gotoList();
+      .pipe(catchError(err => {
+        this.submitted = false;
+        this.error = 'Error creating user';
+        return throwError(err);
+      }))
+      .subscribe(_ => this.gotoList());
   }
 
   onSubmit() {
     this.submitted = true;
+    this.error = null;
     this.save();
   }
 

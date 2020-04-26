@@ -1,7 +1,9 @@
 package com.example.registration.service.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,14 +37,8 @@ public class JwtServiceImpl implements JwtService {
             .getBody();
 
         String username = claims.getSubject();
-        Date expiration = claims.getExpiration();
-
         if (username == null || username.isEmpty()) {
-            throw new IllegalStateException("Missing JWT subject");
-        }
-
-        if (new Date().after(expiration)) {
-            throw new IllegalStateException("JWT is expired");
+            throw new JwtException("Missing JWT subject");
         }
 
         return claims;

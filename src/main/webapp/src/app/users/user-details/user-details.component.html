@@ -1,18 +1,22 @@
-<h2>User Details</h2>
-
-<hr/>
-<div *ngIf="user">
-  <div>
-    <label><b>Username: </b></label> {{user.username}}
+<div class="panel panel-primary" *ngIf="user$ | async as user">
+  <div class="panel-heading">
+    <h3>User Details</h3>
   </div>
-  <div>
-    <label><b>Country: </b></label> {{user.country}}
+  <div class="panel-body">
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" class="form-control" id="username" required [(ngModel)]="user.username" name="username" readonly>
+      </div>
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" class="form-control" id="country" required [(ngModel)]="user.country" name="country" readonly>
+      </div>
+      <div class="form-group">
+        <label>Region</label>
+        <input type="text" class="form-control" id="region" required [(ngModel)]="user.region" name="region" readonly>
+      </div>
+    </form>
   </div>
-  <div>
-    <label><b>Region: </b></label> {{user.region}}
-  </div>
+  <button (click)="list()" class="btn btn-primary">Back to User List</button><br>
 </div>
-
-<br>
-<br>
-<button (click)="list()" class="btn btn-primary">Back to User List</button><br>

@@ -1,0 +1,16 @@
+spring:
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/registration
+    username: postgres
+    password: admin
+
+  jpa.hibernate.ddl-auto: update
+
+logging:
+  level:
+    org.springframework.web: trace
+
+jwt.secret: jwt-public-key
+
+cors.enabled: true
